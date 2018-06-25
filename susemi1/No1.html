@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>西野・若月研究室スーパーユーザーセミナー #1</title>
+  <meta name="description" content="西野研究室のすーぜみ第一回のまとめ">
+  <link rel="icon" href="">
+</head>
+<body>
+  <h1>第１回　スーゼミまとめ</h1>
+  <hr>
+  <h2>複数のOSをインストールする</h2>
+  OSを新たに追加でインストールする場合はOSをインストールするための
+  <strong>未割当パーティション</strong>を確保する必要がある<br>
+  確保するためには、既存のOSに実装されている
+  <strong>ディスク管理プログラム</strong>を用いる。<br>
+  <img src="par.png" alt="パーティションの説明だヨ" width="400" height="300"><br>
+  緑の部分が未割当パーティション<br>
+  <blockquote>PCにおけるパーティション:
+  ハードディスクの区画や領域のことッス</blockquote><br>
+  <hr>
+
+  <h2>２段階ブート</h2>
+  通常、OSを複数導入し、ブートを行うと直近のOSをブートしてしまう。<br>
+  <blockquote>※ブート：起動のこと(boot)　わかりにくいネ！！</blockquote>
+  <img src="boot.png" alt="ブート事故の説明ッス" width="400" height="300"> こういうこと<br>
+  このOS２を起動するために用いられるのが、<strong>２段階ブート</strong>と呼ばれる方法<br>
+  ２段階ブートするためには、
+  <strong>MBR</strong>と呼ばれる領域に<strong>MBM</strong>というプログラムをインストールしないといけない<br>
+  すると、MBRから各OSの<strong>PBR</strong>のブートローダを選択できるようになる<br>
+  <blockquote><strong>MBR? MBM? PBR? ナニソレ...</strong></blockquote>
+  <hr>以下MBR MBM PBR の説明だヨ！！<br>
+
+  <h2>MBR</h2>
+  <blockquote><strong>Master Boot Recorder</strong> の略デス</blockquote>
+  BIOS起動後に一番最初に読み込まれるハードディスク上の領域<br>
+  ここに<strong>ブートローダ</strong>が記録されている<br>
+  <blockquote>ブートローダ：起動に必要なプログラムや情報のことだヨ</blockquote>
+  ブートローダを読み込むことで、起動するOSのパーティションを参照し、
+  対象のパーティション上のPBRのブートローダよりOSを起動する<br>
+  OSインストール時にインストールされるMBRのブートローダは
+  そのOSを起動するためのモノである
+  <blockquote>windowsを起動するのはwindows用のブートローダ...当たり前だネ</blockquote>
+  複数のOSをインストールした場合、何らかの手法を用いてマルチブートを可能にする必要がある<br>
+  <blockquote>今、PCに一般的に入っているシステムはUEFIといって、マルチブートが普通にできるようになってるッス<br>
+    一昔前のPCに入っているBIOSってやつにのみ対応しているシステムッス</blockquote>
+
+  <h2>PBR</h2>
+  <blockquote><strong>Partition Boot Record</strong>の略デス</blockquote>
+  パーティション上に存在するOS用のブートレコード
+  <blockquote>ブートレコード：起動時に読み込まれる記録部分...文字通りだネ！！</blockquote>
+  ここにOS用のブートローダが入る<br>
+  MBRのブートローダからPBRを参照し、PBR上のブートローダからOSを起動する<br>
+  <img src="1boot.png" alt="１段階ブートの説明だヨ" whidth="400" height="300">
+  <blockquote>マルチブートができないMBRだとこんな感じでOS2は起動できないヨ</blockquote>
+
+  <h2>MBM</h2>
+  <blockquote><strong>Multiple Boot Manager</strong>の略デス</blockquote>
+  MBMを導入することで、通常のブートローダの処理に、
+  複数のブートローダの選択を可能にする処理を追加するブートローダの１種<br>
+  <blockquote>これのおかげで、複数のOSの管理が可能になったヨ</blockquote>
+  <img src="2boot.png" alt="２段階ブート画像ッス" width="400" height="300">
+  <blockquote>選択できるからOS１もOS２も起動できるようになったネ</blockquote>
+  <img src="MBMex.png" alt="MBMの例ッス">
+  <blockquote>これがMBMの例だヨ.<br>
+    いくつかのOSが選択できるようになってるネ</blockquote>
+  <hr>
+  以下は説明途中で出てきた<strong>BIOS UEFI</strong>って何カナ？って人向けの説明だヨ<br>
+  まとめた人間もあんまり理解できてないから、そこそこ適当になるッス
+
+  <h2>BIOS</h2>
+  <blockquote><strong>Basic Input/Output System</strong>の略デス</blockquote>
+  PCの不揮発性メモリに格納されている、電源起動時に最初に起動するプログラム.<br>
+  接続されている外部機器のチェックやMBRのブートローダを起動する.<br>
+  BIOSに付属するMBRは、基本的に参照可能なパーティションの数や,
+  パーティションの容量に制限が存在し、BIOSごとにCPUの制限がある.<br>
+
+  <h2>UEFI</h2>
+  <blockquote><strong>Unified Extensible Firmware Interface</strong>の略デス</blockquote>
+  BIOSにとって代わる新しい管理システム
+  <blockquote>正確にはOSとファームウェアのやり取りの規格のことだけどネ<br>
+    あ、ファームウェアの説明がいるカナ？<br>
+    ファームウェア：電子機器に仕事をさせるために組み込む、制御用のプログラムのことだヨ</blockquote>
+  BIOSにはあった対応CPUの制限がなくなり、メモリを十分使えるようになった.<br>
+  MBRやPBRといったブート用の領域が不要になり、ハードディスクの第１パーティションを、<br>
+  UEFIのSDKによるアプリケーションやブートローダを保存するための領域としてフォーマットし、システムパーティションとする.<br>
+  UEFI自体にブートマネージャーが存在し、ここにブートローダを登録することでマルチブートが可能になる.
+  <blockquote>何言ってるかさっぱりだネ！！　まあ、マルチブートが簡単になったってことだヨ</blockquote>
+  UEFIが参照するハードディスクのパーティションテーブルの規格として<strong>GPT</strong>が存在する.
+  <blockquote><strong>GUID Partition Table</strong>の略デス<br>
+    パーティションテーブルの配置に関する標準規格のことだヨ<br>
+    一応パーティションテーブルについても説明するネ<br>
+    パーティションテーブル：パーティションの情報が記録されている場所...のことだヨ<br>
+    「パーティションは２つあって、一つはOS1、もう一つはOS2という名前」みたいなことが書かれていると思っておけばいいヨ</blockquote>
+  GPTはMBRと異なり、パーティションの最大数は１２８、容量の制限は実質存在しない
+  <blockquote>最大８ゼタバイトというふざけてるような数だからネ</blockquote>
+  現行のLinuxやFreeBSD等のUnix系OSでは大体BIOS及びUEFIの起動は可能だが、WindowsOSはUEFIかつ64bit限定での起動が可能
+  <blockquote>ただmacOSはできないッス</blockquote>
+  <hr>
+
+  以上で第１回のスーパーユーザーセミナーのまとめを終了するヨ
+
+</body>
+</html>
