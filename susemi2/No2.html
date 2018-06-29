@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>西野若月研究室スーパーユーザーセミナー＃２</title>
+  <meta name="description" content="西野若月研究室ゼミ第２回まとめ">
+  <link rel="stylesheet" href="st.css">
+</head>
+<body>
+  <h1>ファイルシステム</h1>
+  <hr>
+  <h2>ファイルシステムとは</h2>
+  メモリメディアにファイルなどのデータを書き込むためのシステム<br>
+  ファイルシステムごとに扱えるファイルサイズに制限が存在する<br><br>
+  <strong>種類</strong>
+  <ul>
+    <li>FAT16,FAT32,exFAT</li>
+    <li>NTFS</li>
+  </ul>
+  <blockquote>Windowsでよく使われてるやつだネ</blockquote>
+  <ul>
+    <li>xfs</li>
+  </ul>
+  <blockquote>FreeBSDはこれッス</blockquote>
+  <ul>
+    <li>HFS+</li>
+    <li>APFS</li>
+  </ul>
+  <blockquote>Macはこれデース</blockquote>
+  <blockquote>名前だけじゃよくわからないネ..どんな違いかを次で説明するヨ</blockquote>
+  <hr>
+  <h2>ファイルステムごとの違い</h2>
+  <blockquote>主にWindowsで使われるファイルシステムを比較していくッス</blockquote>
+  <table>
+    <thead>
+      <tr><th></th><th>FAT16</th><th>FAT32</th><th>exFAT</th><th>NTFS</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>最大ボリュームサイズ</th>
+        <th>２GB<br>(OSによっては４GBも可)</th>
+        <th>２TB<br>(OSの制限は３２GB)</th>
+        <th>2^32クラスタ<br>(理論値)</th>
+        <th>2^64クラスタ<br>(理論値)</th></tr>
+      <tr><th>最大ファイルサイズ</th>
+        <th>2GB</th><th>4GB</th><th>2^64-1Byte</th><th>ボリュームサイズまで</th></tr>
+      <tr><th>クラスターサイズ</th>
+        <th>512=64K byte</th><th>同左</th><th>512~32M byte<br>(理論値は2^255セクタ)</th><th>512~64K byte</th></tr>
+      <tr><th>最大クラスター数</th>
+        <th>約65500</th><th>同左</th><th>2^32</th><th>2^64</th></tr>
+    </tbody>
+  </table>
+  <blockquote>
+    <strong>FAT32</strong>はよくUSBとかで見るッスね<br>
+    <strong>NTFS</strong>もWindowsのハードディスクの<a href="#fomat">フォーマット</a>でよく見マース!!<br>
+    いきなり出てきた<strong>クラスタ セクタ</strong>の説明を次でしていくよ
+  </blockquote>
+  <hr>
+  <h2>フロッピーディスク</h2>
+    <blockquote>HDDのお話をフロッピーを例に進めるヨ...</blockquote>
+    ディスクはバウムクーヘンのような層で出来上がっている<br>
+    その層の１周分を<strong>トラック</strong>という<br>
+    そのトラックを一定範囲で分割したものを<strong>セクタ</strong>、
+    セクタが複数集まったものを<strong>クラスタ</strong>という<br>
+    <img src="HDD.png" alt="ディスクのお話" width="350" height="250">
+    <blockquote>大きさは セクタ＜クラスタ＜トラック って感じになるッス</blockquote>
+    セクタはディスク上の最小単位で、２進数で表されるデータが入っている<br>
+    クラスタはファイルシステム上の最小単位<br>
+    セクター番号は外側から降られる<br>
+    セクター番号０はブートセクター、セクター９まではセクターの管理を行う<br>
+    <blockquote><strong>フロッピーの種類</strong></blockquote>
+    <table>
+      <thead>
+        <tr><th>種類</th><th>2D</th><th>2DD</th><th>2HD</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>正式名称</th>
+          <th>2 sided Double density</th>
+          <th>2 sided Double density Double track</th>
+          <th>2 sided High Density</th>
+        </tr>
+        <tr><th>用途</th>
+          <th>？</th><th>ワープロマシン</th><th>PC</th>
+        </tr>
+        <tr><th>容量</th>
+          <th>最初よりは増加</th><th>720K byte</th><th>1440K byte</th>
+        </tr>
+      </tbody>
+    </table>
+    <blockquote>これとは別のシステムがあるヨ</blockquote>
+    <strong>>FAT12</strong>
+    <blockquote><strong>File Allocationn Table 12bit</strong>の略デース</blockquote>
+    クラスタ管理を行うシステム<br>
+    クラスタ番号０はメディアタイプ、クラスタ番号１がビットすべてが１になっているので、実質クラスタ番号は２<br>
+    クラスタ数の最大値は4096
+    <h2>クラスタとセクタ</h2>
+    セクタのサイズは昔は512byteだったが現在は4Kbyteが主流になっている<br>
+    <blockquote>つまりセクタのサイズは記録媒体に依存してるってことダネ</blockquote>
+    クラスタのサイズはファイルシステムに依存<br>
+    <blockquote>FAT16やFAT32の数字は、クラスタの識別番号の表現に必要なbit数だったネ...</blockquote>
+    <h2 id="fomat">クイックフォーマット</h2>
+    <blockquote><strong>フォーマット</strong>：全セクタに対し、削除最適化すること</blockquote>
+    FAT領域の記録部分をすべて『なかったこと』にすること
+    <blockquote>正確には消去してるんじゃなくて、消去しているフラグを立てる(上書き可能にする)って感じだネ</blockquote>
+    ゴミ箱を空にする：セクタファイルの削除を意味するフラグを立てる
+    <blockquote>
+      復元ソフトで復元するのはFAT領域のフラグをもとに対象セクタからデータを拾ってくるんだヨ<br>
+      だから復元ソフトを使うと最初の文字がつぶれたりしてるんスね
+    </blockquote>
+    <hr>
+    以上で第２回のまとめを終わるヨ<br>
+    <a href="#top">TOPへ</a>
+</body>
+</html>
