@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>西野・若月研究室スーパーユーザーセミナー #3</title>
+  <meta name="description" content="西野研究室のすーぜみ第三回のまとめ">
+  <link rel="stylesheet" href="st3.css">
+</head>
+<body>
+  <h1>RAID</h1>
+  <blockquote>Redundat Arrays Insexpensive Disksの略ッス</blockquote><hr>
+  <p>
+  <h2>RAIDって？</h2>
+  複数台のハードディスクを組み合わせることで仮想的な1台のハードディスクとして運用し冗長性を向上させる技術
+  <blockquote>簡単に言うと、安くて低用量のHDDを組み合わせて大容量のHDDの代わりになるストレージ作ろうってことだヨ</blockquote>
+  </p><hr>
+  <h2>RAIDの種類</h2>
+  現在ではRAID０からRAID６までの７種類存在する
+  <blockquote>ただRAID2,RAID3,RAID4はほとんど使われていないから、今回は説明を省くネ
+  </blockquote>
+  <h3>RAID0</h3>
+  <strong>ストライピング</strong><br>
+  複数のHDDを一つとして扱う<br>
+  データを分割し別のHDDに保存する
+  <blockquote>読み書きを並列化することで、高速化してるってことダネ</blockquote>
+  <img src="raid0.png" heght="360" width="320">
+  <blockquote>イメージ図デース</blockquote>
+  欠点：ドライブの数が増えるほど故障率が増加する
+  <blockquote>図の中のどちらか一つ(数が増えるとその中の一つ)が故障すれば動かなくなるヨ</blockquote>
+  <h3>RAID1</h3>
+  <strong>ミラーリング</strong><br>
+  複数のHDDに同じデータを保存する
+  <blockquote>容量の増加は起きないッス</blockquote>
+  <img src="raid1.png"  width="320">
+  <blockquote>ただし、どれかが壊れても一つでも残ってれば動くッス</blockquote>
+  欠点：容量の効率が減少(1/N)
+  <h3>RAID0+1</h3>
+  <blockquote>RAID0とRAID1の合わせ技デース</blockquote>
+  <img src="raid0+1.png" width="320">
+  <h3>RAID1+0</h3>
+  <img src="raid1+0.png" width="320"><br>
+  1台目が故障すると2台目の故障でデータを失う可能師がある
+  <blockquote>だから0+1のほうが主流になっているヨ</blockquote>
+  <h3>RAID5</h3>
+  水平パリティから複数のHDDに誤り訂正データを配置<br>
+  専用パリティドライブが不要
+  <blockquote>パリティって何だ？って感じダネ<br>
+    以下説明だヨ</blockquote>
+    <strong>パリティ</strong>
+    データ本体の葉損があっても復旧するデータ<br>
+    符号にはXOR(排他的論理和)が使われる<br>
+    もっと詳しい説明は<a href="http://dic.nicovideo.jp/a/%E3%83%91%E3%83%AA%E3%83%86%E3%82%A3">ココ(ニコニコ大百科)</a>
+  <br><img src="raid5.png" width="320">
+  <blockquote>Ap,Bp...とかがパリティだヨ</blockquote>
+  <h3>RAID6</h3>
+  パリティを2つ使ったRAID<br>
+  RAID5の長所を持ち、高い障害性がある<br>
+  <img src="raid6.png" width="320">
+  <blockquote>ただ、3台壊れると復旧ができないッス</blockquote>
+  <hr>
+  以上でまとめ第3回を終わりマース<br>
+  <a href="#top">TOP</a>
+</body>
+</html>
